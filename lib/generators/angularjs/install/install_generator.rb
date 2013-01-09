@@ -84,7 +84,7 @@ module Angularjs
         if File.exists?('app/assets/javascripts/routes.js.#{@markup}')
           remove_file 'app/assets/javascripts/routes.js.#{@markup}' 
         end
-        copy_file "routes.coffee.#{@markup}", "app/assets/javascripts/routes.coffee.#{@markup}"
+        copy_file "routes.coffee.erb", "app/assets/javascripts/routes.coffee.#{@markup}"
         insert_into_file "app/assets/javascripts/routes.coffee.#{@markup}", @app_name, before: 'Client'
         ['csrf', 'welcome'].each do |prefix| 
           copy_file "#{prefix}_controller.js.coffee",
@@ -96,7 +96,7 @@ module Angularjs
         if File.exists?('app/assets/javascripts/routes.coffee.#{@markup}')
           remove_file 'app/assets/javascripts/routes.coffee.#{@markup}' 
         end
-        copy_file "routes.js.#{@markup}", "app/assets/javascripts/routes.js.#{@markup}" #if File.exists?("app/assets/javascripts/routes.js.#{@markup}")
+        copy_file "routes.js.erb", "app/assets/javascripts/routes.js.#{@markup}" #if File.exists?("app/assets/javascripts/routes.js.#{@markup}")
         # Rails.logger.info "#{__FILE__}, #{__LINE__}, @app_name: #{@app_name}"
         insert_into_file "app/assets/javascripts/routes.js.#{@markup}", @app_name, before: 'Client'
         ['csrf', 'welcome'].each do |prefix| 
