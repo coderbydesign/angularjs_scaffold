@@ -68,7 +68,7 @@ module Angularjs
       @container_class = options["layout-type"] == "fluid" ? "container-fluid" : "container"
       @language = options["language"] == 'javascript' ? "javascript" : "coffeescript"
       @markup = options["markup"] == 'haml' ? 'haml' : 'erb'
-      template "application.html.#{@markup}", "app/views/layouts/application.html.#{@markup}"
+      template "application.html.#{@markup}", "app/views/layouts/application.html.erb"
     end
 
     def generate_welcome_controller
