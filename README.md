@@ -36,7 +36,7 @@ The "AngularJS way", in my opinion, follows the Unobtrusive Javascript paradigm,
 
 The name given the AngularJS app is based on the Rails app name, plus 'Client', so a rails app named 'Sue' would deploy an AngularJS app 'SueClient' to the browser.  
 
-By default, the markup for template files is set to .haml, so 
+By default, the markup for template files is set to haml, so 
 
     index.html 
 
@@ -44,9 +44,12 @@ becomes
 
     index.html.haml
 
-This can be changed to use .erb in the initial install with option --markup=erb
+This can be changed to use .erb in the initial install with option
+    --markup=erb 
 
-    routes.coffee.erb
+No big deal, but this makes it clear that the AngularJS templates can take advantage of 'server-side provisioning'.  If that term is unclear, I suggest you look at the file 
+
+    routes.coffee.haml (or routes.coffee.erb)
 
 where the AngularJS routes are populated by Rails route helpers.  It just makes sense that the server should specify to the view how it should be accessed.
 
