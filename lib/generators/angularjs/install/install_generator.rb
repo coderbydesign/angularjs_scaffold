@@ -133,7 +133,7 @@ module Angularjs
     end
 
     def welcome_haml
-      haml = <<WELCOME
+      haml = <<-WELCOME
       .hero-unit.center
         %p
           %h1 AngularJS, CoffeeScript and Rails!
