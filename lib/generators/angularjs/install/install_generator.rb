@@ -9,6 +9,8 @@ module Angularjs
       desc: "Don't include bootstrap"
     class_option 'language', type: :string, default: 'coffeescript', aliases: ["-ln"],
       desc: "Choose your preferred language, 'coffeescript' or 'javascript' "
+    class_option 'markup', type: :string, default: 'haml', aliases: ["-mk"],
+      desc: "Choose your preferred markup, 'haml' or 'erb' "
 
     def init_angularjs
       if File.exist?('app/assets/javascripts/application.js')
@@ -60,12 +62,13 @@ module Angularjs
       end
     end
 
-    attr_reader :app_name, :container_class, :language
+    attr_reader :app_name, :container_class, :language, :markup
     def init_twitter_bootstrap_layout
       @app_name = Rails.application.class.parent_name
       @container_class = options["layout-type"] == "fluid" ? "container-fluid" : "container"
       @language = options["language"] == 'javascript' ? "javascript" : "coffeescript"
-      template "application.html.erb", "app/views/layouts/application.html.erb"
+      @markup = options["markup"] == 'haml' ? 'haml' : 'erb'
+      template "application.html.#{@markup}", "app/views/layouts/application.html.#{@markup}"
     end
 
     def generate_welcome_controller
@@ -76,13 +79,13 @@ module Angularjs
       copy_file 'favicon.ico', "app/assets/images/favicon.ico"
       empty_directory "app/assets/templates"
       empty_directory "app/assets/templates/welcome"
-      copy_file "index_welcome.html.erb", "app/assets/templates/welcome/index.html.erb"
+      copy_file "index_welcome.html.#{@markup}", "app/assets/templates/welcome/index.html.#{@markup}"
       if @language == 'coffeescript'
-        if File.exists?('app/assets/javascripts/routes.js.erb')
-          remove_file 'app/assets/javascripts/routes.js.erb' 
+        if File.exists?('app/assets/javascripts/routes.js.#{@markup}')
+          remove_file 'app/assets/javascripts/routes.js.#{@markup}' 
         end
-        copy_file "routes.coffee.erb", "app/assets/javascripts/routes.coffee.erb"
-        insert_into_file "app/assets/javascripts/routes.coffee.erb", @app_name, before: 'Client'
+        copy_file "routes.coffee.#{@markup}", "app/assets/javascripts/routes.coffee.#{@markup}"
+        insert_into_file "app/assets/javascripts/routes.coffee.#{@markup}", @app_name, before: 'Client'
         ['csrf', 'welcome'].each do |prefix| 
           copy_file "#{prefix}_controller.js.coffee",
             "app/assets/javascripts/#{prefix}_controller.js.coffee"
@@ -90,12 +93,12 @@ module Angularjs
         end
         # insert_into_file "app/assets/javascripts/welcome_controller.js.coffee", @app_name, before: 'Client'
       else # javascript
-        if File.exists?('app/assets/javascripts/routes.coffee.erb')
-          remove_file 'app/assets/javascripts/routes.coffee.erb' 
+        if File.exists?('app/assets/javascripts/routes.coffee.#{@markup}')
+          remove_file 'app/assets/javascripts/routes.coffee.#{@markup}' 
         end
-        copy_file "routes.js.erb", "app/assets/javascripts/routes.js.erb" #if File.exists?("app/assets/javascripts/routes.js.erb")
+        copy_file "routes.js.#{@markup}", "app/assets/javascripts/routes.js.#{@markup}" #if File.exists?("app/assets/javascripts/routes.js.#{@markup}")
         # Rails.logger.info "#{__FILE__}, #{__LINE__}, @app_name: #{@app_name}"
-        insert_into_file "app/assets/javascripts/routes.js.erb", @app_name, before: 'Client'
+        insert_into_file "app/assets/javascripts/routes.js.#{@markup}", @app_name, before: 'Client'
         ['csrf', 'welcome'].each do |prefix| 
           copy_file "#{prefix}_controller.js",
             "app/assets/javascripts/#{prefix}_controller.js"

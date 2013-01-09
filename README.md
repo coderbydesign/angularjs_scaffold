@@ -20,6 +20,8 @@ Second install it, this will add angularjs, bootstrap and fontawesome (there's a
       --no-bootstrap
       --language=coffeescript [javascript]  NOTE: this setting will be set for the entire rails app 
         and will affect all subsequent 'rails generate angularjs:scaffold <<model>>' commands
+      --markup=haml [erb]  NOTE: this setting will be set for the entire rails app 
+        and will affect all subsequent 'rails generate angularjs:scaffold <<model>>' commands
 
 Run your usual scaffold command:
 
@@ -34,15 +36,15 @@ The "AngularJS way", in my opinion, follows the Unobtrusive Javascript paradigm,
 
 The name given the AngularJS app is based on the Rails app name, plus 'Client', so a rails app named 'Sue' would deploy an AngularJS app 'SueClient' to the browser.  
 
-Another change I made to this scaffold is adding the .erb extension on the generated template files, so 
+By default, the markup for template files is set to .haml, so 
 
     index.html 
 
 becomes 
 
-    index.html.erb
+    index.html.haml
 
-No big deal, but this makes it clear that the AngularJS templates can take advantage of 'server-side provisioning'.  If that term is unclear, I suggest you look at the file 
+This can be changed to use .erb in the initial install with option --markup=erb
 
     routes.coffee.erb
 

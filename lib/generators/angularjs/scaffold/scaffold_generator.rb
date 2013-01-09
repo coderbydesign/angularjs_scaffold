@@ -7,10 +7,19 @@ module Angularjs
     argument :controller_name, type: :string
 
     def language_option
-      if File.exist?("app/assets/javascripts/routes.js.erb")
+      if File.exist?("app/assets/javascripts/routes.js.erb") || File.exist?("app/assets/javascripts/routes.js.haml")
         answer = 'javascript'
       else
         answer = 'coffeescript'
+      end
+      answer
+    end
+
+    def markup_option
+      if File.exist?("app/assets/javascripts/routes.js.haml") || File.exist?("app/assets/javascripts/routes.coffee.haml")
+        anser = 'haml'
+      else
+        anser = 'erb'
       end
       answer
     end
@@ -46,9 +55,9 @@ module Angularjs
       # append_to_file "app/assets/javascripts/application.js",
       #   "//= require #{@plural_model_name}\n"
       if language_option == 'coffeescript'
-        insert_into_file "app/assets/javascripts/routes.coffee.erb",
+        insert_into_file "app/assets/javascripts/routes.coffee.#{markup_option}",
           ", \'#{@plural_model_name}\'", :after => "'ngCookies'"
-        insert_into_file "app/assets/javascripts/routes.coffee.erb",
+        insert_into_file "app/assets/javascripts/routes.coffee.#{markup_option}",
 %{when("/#{@plural_model_name}", 
     controller: #{@controller}IndexCtrl
     templateUrl: '<%= asset_path(\"#{@plural_model_name}/index.html\") %>'
@@ -63,9 +72,9 @@ module Angularjs
     templateUrl: '<%= asset_path(\"#{@plural_model_name}/edit.html\") %>'
   ).}, :before => 'otherwise'
       else
-        insert_into_file "app/assets/javascripts/routes.js.erb",
+        insert_into_file "app/assets/javascripts/routes.js.#{markup_option}",
           ", '#{@plural_model_name}'", :after => "'ngCookies'"
-        insert_into_file "app/assets/javascripts/routes.js.erb",
+        insert_into_file "app/assets/javascripts/routes.js.#{markup_option}",
 %{\n    when('/#{@plural_model_name}', {controller:#{@controller}IndexCtrl,
       templateUrl:'<%= asset_path("#{@plural_model_name}/index.html") %>'}).
     when('/#{@plural_model_name}/new', {controller:#{@controller}CreateCtrl,
@@ -78,21 +87,21 @@ module Angularjs
       
       inject_into_class "app/controllers/#{@plural_model_name}_controller.rb",
         "#{@controller}Controller".constantize, "respond_to :json\n"
-      template "new.html.erb",
-        "app/assets/templates/#{@plural_model_name}/new.html.erb"
-      template "edit.html.erb",
-        "app/assets/templates/#{@plural_model_name}/edit.html.erb"
-      template "show.html.erb",
-        "app/assets/templates/#{@plural_model_name}/show.html.erb"
-      template "index.html.erb",
-        "app/assets/templates/#{@plural_model_name}/index.html.erb"
+      template "new.html.#{markup_option}",
+        "app/assets/templates/#{@plural_model_name}/new.html.#{markup_option}"
+      template "edit.html.#{markup_option}",
+        "app/assets/templates/#{@plural_model_name}/edit.html.#{markup_option}"
+      template "show.html.#{markup_option}",
+        "app/assets/templates/#{@plural_model_name}/show.html.#{markup_option}"
+      template "index.html.#{markup_option}",
+        "app/assets/templates/#{@plural_model_name}/index.html.#{markup_option}"
 
       model_index_link = "\n<li><%= link_to \'#{@controller_name}\', #{@plural_model_name}_path  %></li>"
       
-      # insert_into_file "app/views/layouts/application.html.erb",  model_index_link,
+      # insert_into_file "app/views/layouts/application.html.#{markup_option}",  model_index_link,
       #   after: "<!-- sidebar menu models -->"
 
-      insert_into_file "app/views/layouts/application.html.erb",  model_index_link,
+      insert_into_file "app/views/layouts/application.html.#{markup_option}",  model_index_link,
         after: "<!-- main menu models -->"
       
       if language_option == 'coffeescript'
