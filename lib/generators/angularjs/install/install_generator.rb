@@ -79,7 +79,7 @@ module Angularjs
       copy_file 'favicon.ico', "app/assets/images/favicon.ico"
       empty_directory "app/assets/templates"
       empty_directory "app/assets/templates/welcome"
-      copy_file "index_welcome.html.#{@markup}", "app/assets/templates/welcome/index.html.#{@markup}"
+      copy_file "index_welcome.html.#{@markup}", "app/assets/templates/welcome/index.html.erb"
       if @language == 'coffeescript'
         if File.exists?('app/assets/javascripts/routes.js.#{@markup}')
           remove_file 'app/assets/javascripts/routes.js.#{@markup}' 
