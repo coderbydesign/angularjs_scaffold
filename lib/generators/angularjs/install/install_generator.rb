@@ -79,7 +79,12 @@ module Angularjs
       copy_file 'favicon.ico', "app/assets/images/favicon.ico"
       empty_directory "app/assets/templates"
       empty_directory "app/assets/templates/welcome"
-      copy_file "index_welcome.html.erb", "app/assets/templates/welcome/index.html.#{@markup}"
+      if @markup == 'haml'
+        remove_file "index_welcome.html.erb"
+        create_file "app/assets/templates/welcome/index.html.haml", welcome_haml
+      else
+        copy_file "index_welcome.html.erb", "app/assets/templates/welcome/index.html.#{@markup}"
+      end
       if @language == 'coffeescript'
         if File.exists?('app/assets/javascripts/routes.js.#{@markup}')
           remove_file 'app/assets/javascripts/routes.js.#{@markup}' 
@@ -125,6 +130,18 @@ module Angularjs
   end
  }, before: "end"
 
+    end
+
+    def welcome_haml
+      haml = <<WELCOME
+      .hero-unit.center
+        %p
+          %h1 AngularJS, CoffeeScript and Rails!
+        %p
+          %img{:src => "/assets/AngularJS-medium.png"}
+      WELCOME
+
+      haml
     end
   end
 end
